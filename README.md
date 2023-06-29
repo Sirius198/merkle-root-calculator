@@ -3,4 +3,4 @@
 1. Replace `json/whitelist.json` with whitelisted addresses.
 2. make sure `node` is installed
 3. `npm i` && `node index.js`
-4. Result should be saved in `json/merkle_proof.json`.
+4. Result will be saved in `json/merkle_proof.json`.
