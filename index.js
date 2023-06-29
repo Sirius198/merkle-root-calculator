@@ -1,12 +1,31 @@
 const { MerkleTree } = require('merkletreejs')
 const SHA256 = require('crypto-js/sha256')
+const fs = require('fs');
 
-const leaves = ['a', 'b', 'c'].map(x => SHA256(x))
-const tree = new MerkleTree(leaves, SHA256)
-const root = tree.getRoot().toString('hex')
+let jsonData = require('./json/whitelist.json');
 
-console.log(root)
+function main() {
+    console.log(`${jsonData.length} addresses found 'whitelist.json' file.`)
+    if (jsonData.length == 0) {
+        return
+    }
 
-const leaf = SHA256('a')
-const proof = tree.getProof(leaf)
-console.log(tree.verify(proof, leaf, root)) // true
+    const leaves = jsonData.map(x => SHA256(x))
+    const tree = new MerkleTree(leaves, SHA256)
+    const root = tree.getRoot().toString('hex')
+    console.log(`Root Hash: ${root}`)
+
+    const n = jsonData.length
+    var proofData = {}
+    for (var i = 0;i < n;i++) {
+        const leaf = SHA256(jsonData[i])
+        const prf = tree.getProof(leaf)
+        proofData[jsonData[i]] = prf.map(p => p.data.toString('hex'))
+    }
+
+    let data = JSON.stringify(proofData, null, 2)
+    fs.writeFileSync('./json/merkle_proof.json', data)
+    console.log(`Merkle proof is saved to merkle_proof.json`)
+}
+
+main()
