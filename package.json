@@ -2,5 +2,8 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "merkletreejs": "^0.3.10"
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }

@@ -17,17 +17,22 @@ function main() {
 
     const n = jsonData.length
     var proofData = {}
+    var commandData = {}
     for (var i = 0;i < n;i++) {
         const leaf = SHA256(jsonData[i])
         const prf = tree.getProof(leaf)
         proofData[jsonData[i]] = prf.map(p => p.data.toString('hex'))
         const t = prf.map(p => p.position == "left" ? 'L' : 'R').join("")
         proofData[jsonData[i]].push(t)
+        commandData[jsonData[i]] = proofData[jsonData[i]].join(",")
     }
 
     let data = JSON.stringify(proofData, null, 2)
     fs.writeFileSync('./json/merkle_proof.json', data)
     console.log(`Merkle proof is saved to merkle_proof.json`)
+
+    let data2 = JSON.stringify(commandData, null, 2)
+    fs.writeFileSync('./json/merkle_proof_ex.json', data2)
 }
 
 main()
