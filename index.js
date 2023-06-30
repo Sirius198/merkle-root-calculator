@@ -21,6 +21,8 @@ function main() {
         const leaf = SHA256(jsonData[i])
         const prf = tree.getProof(leaf)
         proofData[jsonData[i]] = prf.map(p => p.data.toString('hex'))
+        const t = prf.map(p => p.position == "left" ? 'L' : 'R').join("")
+        proofData[jsonData[i]].push(t)
     }
 
     let data = JSON.stringify(proofData, null, 2)
